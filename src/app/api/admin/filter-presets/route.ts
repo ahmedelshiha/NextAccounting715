@@ -1,33 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { prisma } from '@/lib/prisma'
-import { authOptions } from '@/lib/auth'
+import { withTenantContext } from '@/lib/api-wrapper'
+import { requireTenantContext } from '@/lib/tenant-utils'
+import prisma from '@/lib/prisma'
+import { respond } from '@/lib/api-response'
 
 /**
  * GET /api/admin/filter-presets
  * List all saved filter presets for the current tenant
  */
-export async function GET(request: NextRequest) {
+export const GET = withTenantContext(async (request: NextRequest) => {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    const ctx = requireTenantContext()
 
-    const user = await prisma.users.findUnique({
-      where: { id: session.user.id },
-      include: { Tenant: true },
-    })
-
-    if (!user?.tenantId) {
-      return NextResponse.json(
-        { error: 'No tenant found' },
-        { status: 400 }
-      )
+    if (!ctx?.userId || !ctx?.tenantId) {
+      return respond.unauthorized()
     }
 
     const { searchParams } = new URL(request.url)
@@ -36,7 +22,7 @@ export async function GET(request: NextRequest) {
     const includeShared = searchParams.get('includeShared') !== 'false'
 
     const whereClause: any = {
-      tenantId: user.tenantId,
+      tenantId: ctx.tenantId,
       entityType,
     }
 
@@ -45,10 +31,10 @@ export async function GET(request: NextRequest) {
     } else if (includeShared) {
       whereClause.OR = [
         { isPublic: true },
-        { createdBy: session.user.id },
+        { createdBy: ctx.userId },
       ]
     } else {
-      whereClause.createdBy = session.user.id
+      whereClause.createdBy = ctx.userId
     }
 
     const presets = await prisma.filter_presets.findMany({
@@ -83,47 +69,28 @@ export async function GET(request: NextRequest) {
       ],
     })
 
-    return NextResponse.json({
-      success: true,
-      presets: presets.map((p) => ({
+    return respond.ok(
+      presets.map((p) => ({
         ...p,
         filterConfig: typeof p.filterConfig === 'string' ? JSON.parse(p.filterConfig) : p.filterConfig,
-      })),
-    })
+      }))
+    )
   } catch (error) {
     console.error('Failed to fetch filter presets:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch presets' },
-      { status: 500 }
-    )
+    return respond.serverError('Failed to fetch presets')
   }
-}
+})
 
 /**
  * POST /api/admin/filter-presets
  * Create a new filter preset
  */
-export async function POST(request: NextRequest) {
+export const POST = withTenantContext(async (request: NextRequest) => {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    const ctx = requireTenantContext()
 
-    const user = await prisma.users.findUnique({
-      where: { id: session.user.id },
-      include: { Tenant: true },
-    })
-
-    if (!user?.tenantId) {
-      return NextResponse.json(
-        { error: 'No tenant found' },
-        { status: 400 }
-      )
+    if (!ctx?.userId || !ctx?.tenantId) {
+      return respond.unauthorized()
     }
 
     const body = await request.json()
@@ -138,33 +105,27 @@ export async function POST(request: NextRequest) {
     } = body
 
     if (!name || !filterConfig) {
-      return NextResponse.json(
-        { error: 'Missing required fields: name, filterConfig' },
-        { status: 400 }
-      )
+      return respond.badRequest('Missing required fields: name, filterConfig')
     }
 
     // Check if preset with same name exists
     const existing = await prisma.filter_presets.findFirst({
       where: {
-        tenantId: user.tenantId,
+        tenantId: ctx.tenantId,
         name,
-        createdBy: session.user.id,
+        createdBy: ctx.userId,
       },
     })
 
     if (existing) {
-      return NextResponse.json(
-        { error: 'Preset with this name already exists' },
-        { status: 409 }
-      )
+      return respond.conflict('Preset with this name already exists')
     }
 
     const filterLogic = filterConfig.logic || 'AND'
 
     const preset = await prisma.filter_presets.create({
       data: {
-        tenantId: user.tenantId,
+        tenantId: ctx.tenantId,
         name,
         description: description || null,
         entityType,
@@ -173,7 +134,7 @@ export async function POST(request: NextRequest) {
         isPublic,
         icon: icon || null,
         color: color || null,
-        createdBy: session.user.id,
+        createdBy: ctx.userId,
       },
       include: {
         creator: {
@@ -186,19 +147,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(
-      {
-        success: true,
-        ...preset,
-        filterConfig: JSON.parse(preset.filterConfig),
-      },
-      { status: 201 }
-    )
+    return respond.created({
+      ...preset,
+      filterConfig: JSON.parse(preset.filterConfig),
+    })
   } catch (error) {
     console.error('Failed to create filter preset:', error)
-    return NextResponse.json(
-      { error: 'Failed to create preset' },
-      { status: 500 }
-    )
+    return respond.serverError('Failed to create preset')
   }
-}
+})
