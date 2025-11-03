@@ -19,7 +19,8 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { useDashboardMetrics, useDashboardRecommendations, useDashboardAnalytics, useFilterUsers } from '../../hooks'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useDashboardMetrics, useDashboardRecommendations, useDashboardAnalytics, useServerSideFiltering } from '../../hooks'
 import { UserItem } from '../../contexts/UsersContextProvider'
 import { toast } from 'sonner'
 
