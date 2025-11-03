@@ -1455,6 +1455,7 @@ model users {
   workflow_history                                     workflow_history[]
   workflow_steps                                       workflow_steps[]
   workflow_templates                                   workflow_templates[]
+  filter_presets                                       filter_presets[]           @relation("FilterPresetCreatedBy")
 
   @@unique([tenantId, email])
   @@index([experienceYears])
