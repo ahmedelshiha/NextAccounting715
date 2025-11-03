@@ -199,25 +199,49 @@ export const UsersTable = memo(function UsersTable({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
         <div className="space-y-1">
           <CardTitle>User Directory</CardTitle>
           <CardDescription>Search, filter and manage users</CardDescription>
         </div>
-        {users.length > 0 && (
-          <div className="flex items-center gap-2 text-sm" role="toolbar" aria-label="Table selection actions">
-            <Checkbox
-              checked={allSelected || someSelected}
-              onCheckedChange={handleSelectAllChange}
-              aria-label={allSelected ? 'Deselect all users' : 'Select all users'}
-              title={allSelected ? 'Deselect all users' : 'Select all users'}
-              className={someSelected ? 'opacity-50' : ''}
-            />
-            <span className="text-gray-500" aria-live="polite">
-              {selectedUserIds.size > 0 ? `${selectedUserIds.size} selected` : 'Select all'}
-            </span>
-          </div>
-        )}
+        <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center gap-3">
+          {users.length > 0 && (
+            <div className="flex items-center gap-2 text-sm" role="toolbar" aria-label="Table selection actions">
+              <Checkbox
+                checked={allSelected || someSelected}
+                onCheckedChange={handleSelectAllChange}
+                aria-label={allSelected ? 'Deselect all users' : 'Select all users'}
+                title={allSelected ? 'Deselect all users' : 'Select all users'}
+                className={someSelected ? 'opacity-50' : ''}
+              />
+              <span className="text-gray-500 hidden sm:inline" aria-live="polite">
+                {selectedUserIds.size > 0 ? `${selectedUserIds.size} selected` : 'Select all'}
+              </span>
+            </div>
+          )}
+          {isMobile && (
+            <div className="flex gap-1">
+              <Button
+                variant={viewMode === 'table' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('table')}
+                aria-label="Table view"
+                title="Table view"
+              >
+                <List className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === 'card' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('card')}
+                aria-label="Card view"
+                title="Card view"
+              >
+                <Grid3x3 className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
