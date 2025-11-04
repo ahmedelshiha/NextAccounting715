@@ -123,6 +123,7 @@ export const GET = withTenantContext(async (request: Request) => {
         return new NextResponse(null, { status: 304, headers: { ETag: etag } })
       }
 
+      const totalPages = Math.ceil(total / limit)
       return NextResponse.json(
         {
           users: mapped,
@@ -130,13 +131,17 @@ export const GET = withTenantContext(async (request: Request) => {
             page,
             limit,
             total,
-            pages: Math.ceil(total / limit)
+            pages: totalPages
           }
         },
         {
           headers: {
             ETag: etag,
-            'Cache-Control': 'private, max-age=30, stale-while-revalidate=60'
+            'Cache-Control': 'private, max-age=30, stale-while-revalidate=60',
+            'X-Total-Count': total.toString(),
+            'X-Total-Pages': totalPages.toString(),
+            'X-Current-Page': page.toString(),
+            'X-Page-Size': limit.toString()
           }
         }
       )
