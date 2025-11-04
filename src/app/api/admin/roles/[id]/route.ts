@@ -173,6 +173,17 @@ export const DELETE = withTenantContext(async (req: Request, { params }: { param
       where: { id: params.id },
     })
 
+    // Emit real-time event for role deletion
+    try {
+      realtimeService.emitRoleUpdated(params.id, {
+        action: 'deleted',
+        roleName: targetRole.name,
+        permissions: targetRole.permissions
+      })
+    } catch (err) {
+      console.error('Failed to emit role deleted event:', err)
+    }
+
     // Log role deletion
     await AuditLoggingService.logAuditEvent({
       action: AuditActionType.ROLE_DELETED,
