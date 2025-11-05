@@ -43,7 +43,7 @@ function getFeatureFlagConfig(): WorkstationFeatureFlagConfig {
  * Determine if user should see workstation based on rollout percentage
  * Uses user ID hash for consistent experience across sessions
  */
-function shouldShowWorkstation(userId: string | null, rolloutPercentage: number): boolean {
+function shouldShowWorkstation(userId: string | null | undefined, rolloutPercentage: number): boolean {
   if (rolloutPercentage === 100) return true
   if (rolloutPercentage === 0) return false
   
