@@ -92,10 +92,11 @@ export function WorkstationIntegrated({
       if (newFilters.role) params.set('role', newFilters.role)
       if (newFilters.status) params.set('status', newFilters.status)
       if (newFilters.department) params.set('department', newFilters.department)
-      if (newFilters.dateRange) params.set('dateRange', newFilters.dateRange)
+      if (newFilters.dateRange && newFilters.dateRange !== 'all') params.set('dateRange', newFilters.dateRange)
 
-      const newUrl = params.toString()
-        ? `${window.location.pathname}?${newUrl}`
+      const queryString = params.toString()
+      const newUrl = queryString
+        ? `${window.location.pathname}?${queryString}`
         : window.location.pathname
 
       window.history.replaceState({}, '', newUrl)
