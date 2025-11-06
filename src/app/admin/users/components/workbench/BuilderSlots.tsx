@@ -149,25 +149,21 @@ export function BuilderFooterSlot(props: Parameters<typeof BulkActionsPanel>[0])
   }
 
   if (isLoading) {
-    return <BulkActionsPanel {...props} /> // Show default while loading
+    return <BulkActionsPanel {...props} />
   }
 
   if (error) {
     console.warn(`Failed to load Builder.io footer content: ${error}`)
-    return <BulkActionsPanel {...props} /> // Fallback to default on error
+    return <BulkActionsPanel {...props} />
   }
 
   if (!content) {
-    return <BulkActionsPanel {...props} /> // No content available
+    return <BulkActionsPanel {...props} />
   }
 
   return (
     <div data-builder-model={BUILDER_MODELS.ADMIN_WORKBENCH_FOOTER}>
-      {content.blocks ? (
-        <div>{/* Render builder blocks */}</div>
-      ) : (
-        <BulkActionsPanel {...props} />
-      )}
+      {content.blocks ? renderBuilderBlocks(content.blocks) : <BulkActionsPanel {...props} />}
     </div>
   )
 }
