@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
-import { UsersTable } from '../UsersTable'
+import UsersTableWrapper from './UsersTableWrapper'
 
 interface UserDirectorySectionProps {
   selectedUserIds?: Set<string>
@@ -12,7 +12,7 @@ interface UserDirectorySectionProps {
 
 /**
  * User directory section containing the virtualized users table
- * 
+ *
  * Features:
  * - Virtualized list rendering (10,000+ users at 60fps)
  * - Responsive columns
@@ -27,7 +27,7 @@ export default function UserDirectorySection({
 }: UserDirectorySectionProps) {
   return (
     <Suspense fallback={<UserDirectorySkeleton />}>
-      <UsersTable
+      <UsersTableWrapper
         selectedUserIds={selectedUserIds}
         onSelectionChange={onSelectionChange}
         filters={filters}
