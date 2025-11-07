@@ -8,6 +8,7 @@ export interface OperationsMetrics {
   pendingApprovals: number
   inProgressWorkflows: number
   dueThisWeek: number
+  systemHealth?: number
 }
 
 interface OperationsOverviewCardsProps {
