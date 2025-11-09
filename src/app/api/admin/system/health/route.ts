@@ -44,7 +44,7 @@ async function checkDatabase(): Promise<{
     latency = await measureTime(async () => {
       try {
         // Simple connectivity check using the imported client
-        await prisma.$queryRaw`SELECT 1`
+        await prisma.$queryRawUnsafe('SELECT 1')
       } catch (e) {
         throw e
       }
