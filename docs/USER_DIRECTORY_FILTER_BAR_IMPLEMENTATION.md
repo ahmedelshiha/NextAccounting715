@@ -764,45 +764,7 @@ See: [PHASE_7_ADVANCED_QUERY_BUILDER.md](./PHASE_7_ADVANCED_QUERY_BUILDER.md)
 
 ---
 
-## ⏳ PENDING PHASES (15-20)
-
----
-
-### Phase 14: Custom Report Builder (v3.0)
-**Status:** Pending  
-**Estimated Effort:** 6-8 hours  
-**Priority:** High  
-**Target Release:** Q2-Q3 2025  
-
-#### Tasks:
-
-1. **Report Design UI** (3 hours)
-   - [ ] Create `ReportBuilder.tsx` component
-   - [ ] Drag-and-drop report sections
-   - [ ] Choose columns to include
-   - [ ] Grouping options (by role, status, etc.)
-   - [ ] Summary calculations (count, sum, avg)
-   - [ ] Sorting controls
-   - [ ] Visual report preview
-
-2. **Report Templates** (1.5 hours)
-   - [ ] Create pre-built report layouts
-   - [ ] Save custom report templates
-   - [ ] Template library/gallery
-   - [ ] Template sharing
-
-3. **Scheduled Reports** (2 hours)
-   - [ ] Schedule report generation
-   - [ ] Auto-email recipients
-   - [ ] Report archive/history
-   - [ ] Execution logs
-
-4. **Report API** (1.5 hours)
-   - [ ] `POST /api/admin/reports` - Create report
-   - [ ] `GET /api/admin/reports` - List reports
-   - [ ] `GET /api/admin/reports/:id` - Get report
-   - [ ] `GET /api/admin/reports/:id/generate` - Generate report
-   - [ ] `DELETE /api/admin/reports/:id` - Delete report
+## ⏳ PENDING PHASES (20 ONLY)
 
 ---
 
