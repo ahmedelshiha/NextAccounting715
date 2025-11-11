@@ -134,11 +134,11 @@ export default function ProfessionalKPIGrid({ stats }: KPIStatsProps) {
                     {'change' in kpi && (
                       <div className="flex items-center gap-1">
                         {kpi.trend === 'up' ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className="h-3 w-3 text-green-500" />
                         ) : (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className="h-3 w-3 text-red-500" />
                         )}
-                        <span className={`text-sm font-medium ${
+                        <span className={`text-xs font-medium ${
                           kpi.trend === 'up' ? 'text-green-600' : 'text-red-600'
                         }`}>
                           {kpi.change! > 0 ? '+' : ''}{kpi.change!.toFixed(1)}%
