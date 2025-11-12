@@ -70,7 +70,7 @@ export default function EntitiesPage() {
 
   return (
     <PermissionGate
-      permission="USERS_VIEW"
+      permission="entity.read"
       fallback={
         <div className="p-6 text-center">
           <p className="text-gray-600">
@@ -88,7 +88,7 @@ export default function EntitiesPage() {
               Manage business entities and tax registrations
             </p>
           </div>
-          <PermissionGate permission="USERS_MANAGE">
+          <PermissionGate permission="entity.create">
             <Link href="/admin/entities/new">
               <Button className="gap-2">
                 <Plus className="w-4 h-4" />
