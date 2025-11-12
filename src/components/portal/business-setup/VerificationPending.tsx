@@ -107,7 +107,7 @@ export default function VerificationPending({
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Verifying Your Business</h3>
               <p className="text-sm text-gray-600">
-                We're securely verifying your business details and registrations.
+                We&apos;re securely verifying your business details and registrations.
               </p>
             </div>
 
@@ -116,7 +116,7 @@ export default function VerificationPending({
                 <span className="font-semibold">Estimated time:</span> {estimatedTime}
               </p>
               <p className="text-xs text-blue-700 mt-1">
-                You can close this window. We'll send you a notification when done.
+                You can close this window. We&apos;ll send you a notification when done.
               </p>
             </div>
 
@@ -248,7 +248,7 @@ function VerificationError({
               <p className="text-sm text-amber-900">
                 <span className="font-semibold">What next?</span>
                 <br />
-                Our team will review your details manually. You'll receive an email with updates within 24 hours.
+                Our team will review your details manually. You&apos;ll receive an email with updates within 24 hours.
               </p>
             </div>
           </div>
