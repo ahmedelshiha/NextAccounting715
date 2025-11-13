@@ -169,12 +169,12 @@ export async function verifyEntityRegistrations(
         const country = getCountry(entity.country as CountryCode);
         const validator = country?.validators.find(v => v.type === registration.type);
 
-        if (validator && validator.validate(registration.value)) {
+        if (validator && validator.checksum && validator.checksum(registration.value)) {
           // Mark as verified in database
           await prisma.entityRegistration.update({
             where: { id: registration.id },
             data: { 
-              verifiedAt: new Date(),
+    
               status: "VERIFIED",
             },
           });
@@ -236,7 +236,7 @@ export async function verifyEntityRegistrations(
         where: { id: entityId },
         data: {
           status: "VERIFIED",
-          verifiedAt: new Date(),
+
         },
       });
 
