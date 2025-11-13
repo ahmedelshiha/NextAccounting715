@@ -57,7 +57,7 @@ export const POST = withTenantContext(
         data: {
           ticketId: id,
           
-          authorId: userId,
+          authorId: userId!,
           content: validated.content,
         },
         include: { author: { select: { id: true, email: true, name: true } } },
